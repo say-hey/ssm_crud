@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- spring配置文件,主要配置业务逻辑有关 -->
+    <!-- 数据源,事务控制,mybatis整合 -->
+
+    <!-- 自动扫描组件,但是不扫描Controller,Controller让springmvc扫描 -->
+    <context:component-scan base-package="com.ssm">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+
+    <!-- 引入外部配置文件 -->
+    <context:property-placeholder location="classpath:dbconfig.properties"/>
+    <!-- 数据源 C3P0 -->
+    <!--    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+    <!--        <property name="driverClass" value="${jdbc.driver}"/>-->
+    <!--        <property name="jdbcUrl" value="${jdbc.url}"/>-->
+    <!--        <property name="user" value="${jdbc.user}"/>-->
+    <!--        <property name="password" value="${jdbc.password}"/>-->
+    <!--    </bean>-->
+    <!--  druid数据源  -->
+    <bean id="pooledDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.jdbcUrl}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 配置mybatis整合 -->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 指定mybatis全局配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 数据源 -->
+        <property name="dataSource" ref="pooledDataSource"/>
+        <!-- 指定mybatis,mapper文件位置 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>
+
+    <!-- 配置扫描器,将mybatis接口的实现加入到IOC容器中 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描所有dao接口实现,加入IOC容器中 -->
+        <property name="basePackage" value="com.ssm.dao"></property>
+    </bean>
+
+    <!-- 配置一个可以执行批量sqlSession -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactoryBean"/>
+        <!-- 使用批量执行器 -->
+        <constructor-arg name="executorType" value="BATCH"/>
+    </bean>
+
+    <!-- 事务控制的配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="pooledDataSource"></property>
+    </bean>
+
+    <!-- 开启基于注解/xml的事务,重要的用xml配合 -->
+    <aop:config>
+        <!-- 切入点表达式 被匹配中的都是切入点 之后被事务增强-->
+        <aop:pointcut expression="execution(* com.ssm.service..*(..))" id="txPoint"/>
+        <!-- 配置事务增强 -->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
+    </aop:config>
+
+    <!-- 利用事务管理器transactionManager,将上下两个配置链接一起,利用切入点表达式进行切入,之后的方法看下面 -->
+    <!-- 配置事务增强 事务如何切入--><!-- 切入点表达式之后怎么切,要看下面的方法 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- * 代表所有方法都是事务方法 -->
+            <tx:method name="*"/>
+            <!-- 以get开头的方法 read-only只读-->
+            <tx:method name="get*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+</beans>

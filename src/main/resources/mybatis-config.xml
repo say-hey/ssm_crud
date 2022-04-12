@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 驼峰命名规则 从经典数据库列名 A_COLUMN 到经典 Java 属性名 aColumn 的类似映射。 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <package name="com.ssm.bean"/>
+    </typeAliases>
+
+    <!-- 使用pagehelper插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 分页合理化，如果超出总页数，只显示最后一页，合理显示 -->
+            <property name="reasonable" value="true"/>
+        </plugin>
+    </plugins>
+</configuration>

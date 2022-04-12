@@ -1,0 +1,163 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<!-- web-app 必须要添加这些约束信息，否则标签内的顺序要按规定 -->
+<!--<web-app >-->
+
+<!--    <display-name>Archetype Created Web Application</display-name>-->
+
+<!--    &lt;!&ndash; 1.启动spring的容器 &ndash;&gt;-->
+<!--    <context-param>-->
+<!--        <param-name>contextConfigLocation</param-name>-->
+<!--        <param-value>classpath:applicationContext.xml</param-value>-->
+<!--    </context-param>-->
+
+<!--    &lt;!&ndash; 监听器,项目启动指定加载某spring配置文件,用于初始化 &ndash;&gt;-->
+<!--    <listener>-->
+<!--        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+<!--    </listener>-->
+
+<!--    &lt;!&ndash; 2.SpringMVC前端控制器, 拦截所有请求&ndash;&gt;-->
+<!--    &lt;!&ndash; The front controller of this Spring Web application, responsible for handling all application requests &ndash;&gt;-->
+<!--    <servlet>-->
+<!--        <servlet-name>springDispatcherServlet</servlet-name>-->
+<!--        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
+<!--        <init-param>-->
+<!--            <param-name>contextConfigLocation</param-name>-->
+<!--            &lt;!&ndash; 指定springmvc配置文件 &ndash;&gt;-->
+<!--            <param-value>classpath:springmvc.xml</param-value>-->
+<!--        </init-param>-->
+<!--        <load-on-startup>1</load-on-startup>-->
+<!--    </servlet>-->
+
+<!--    &lt;!&ndash; Map all requests to the DispatcherServlet for handling &ndash;&gt;-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>springDispatcherServlet</servlet-name>-->
+<!--        <url-pattern>/</url-pattern>-->
+<!--    </servlet-mapping>-->
+
+
+<!--    &lt;!&ndash; 3.字符编码过滤器 ,放在最前面执行&ndash;&gt;-->
+<!--    <filter>-->
+<!--        <filter-name>characterEncodingFilter</filter-name>-->
+<!--        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>-->
+<!--        &lt;!&ndash; 配置编码格式 &ndash;&gt;-->
+<!--        <init-param>-->
+<!--            <param-name>encoding</param-name>-->
+<!--            <param-value>UTF-8</param-value>-->
+<!--        </init-param>-->
+<!--        &lt;!&ndash; 设置响应和请求格式都为true &ndash;&gt;-->
+<!--        <init-param>-->
+<!--            <param-name>forceRequestEncoding</param-name>-->
+<!--            <param-value>true</param-value>-->
+<!--        </init-param>-->
+<!--        <init-param>-->
+<!--            <param-name>forceResponseEncoding</param-name>-->
+<!--            <param-value>true</param-value>-->
+<!--        </init-param>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>characterEncodingFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </filter-mapping>-->
+
+<!--    &lt;!&ndash; 4.使用REST风格URI,将普通的POST请求转为DELETE,GET &ndash;&gt;-->
+<!--    <filter>-->
+<!--        <filter-name>hiddenHttpMethodFilter</filter-name>-->
+<!--        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>hiddenHttpMethodFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </filter-mapping>-->
+<!--    &lt;!&ndash; 添加能直接处理PUT请求的过滤器 &ndash;&gt;-->
+<!--    &lt;!&ndash; HttpPutFormContentFilter过时了，使用 FormContentFilter能支持PUT和DELETE&ndash;&gt;-->
+<!--    <filter>-->
+<!--        <filter-name>formContentFilter</filter-name>-->
+<!--        <filter-class>org.springframework.web.filter.FormContentFilter</filter-class>-->
+<!--    </filter>-->
+<!--    <filter-mapping>-->
+<!--        <filter-name>formContentFilter</filter-name>-->
+<!--        <url-pattern>/*</url-pattern>-->
+<!--    </filter-mapping>-->
+
+<!--</web-app>-->
+<web-app>
+    <!--  标签按顺序编写  -->
+    <display-name>Archetype Created Web Application</display-name>
+    <!-- 1.启动spring的容器 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+    <!-- 2.字符编码过滤器 ,放在最前面执行-->
+    <filter>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <!-- 配置编码格式 -->
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <!-- 设置响应和请求格式都为true -->
+        <init-param>
+            <param-name>forceRequestEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceResponseEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+
+
+    <!-- 3.使用REST风格URI,将普通的POST请求转为DELETE,GET -->
+    <filter>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+    <!-- 添加能直接处理PUT请求的过滤器 -->
+    <!-- HttpPutFormContentFilter过时了，使用 FormContentFilter能支持PUT和DELETE-->
+    <filter>
+        <filter-name>formContentFilter</filter-name>
+        <filter-class>org.springframework.web.filter.FormContentFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>hiddenHttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>formContentFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
+    <!-- 4.监听器,项目启动指定加载某spring配置文件,用于初始化 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- 5.SpringMVC前端控制器, 拦截所有请求-->
+    <!-- The front controller of this Spring Web application, responsible for handling all application requests -->
+    <servlet>
+        <servlet-name>springDispatcherServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <!-- 指定springmvc配置文件 -->
+            <param-value>classpath:springmvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!-- Map all requests to the DispatcherServlet for handling -->
+    <servlet-mapping>
+        <servlet-name>springDispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>

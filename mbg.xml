@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <!-- 生成toString方法-->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+
+        <!-- 禁止自动生成注释 -->
+        <commentGenerator>
+            <!-- 编码格式 -->
+            <property name="javaFileEncoding" value="UTF-8"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+
+        <!-- 配置数据库连接 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/ssm_crud?serverTimezone=UTC&amp;useSSL=false"
+                        userId="root" password="123456"/>
+
+        <!--数据库BigDecimals字段在java中定义 -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+
+        <!-- 指定JavaBean生成位置 -->
+        <javaModelGenerator targetPackage="com.ssm.bean"
+                            targetProject="src\main\java"/>
+
+        <!-- 指定sql映射文件生产位置 -->
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src\main\resources"/>
+
+        <!-- 指定dao接口生成的位置,mapper接口 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.ssm.dao" targetProject="src\main\java"/>
+
+        <!-- 指定每个表生成策略 -->
+        <table tableName="tbl_emp" domainObjectName="Employee"></table>
+        <table tableName="tbl_dept" domainObjectName="Department"></table>
+
+
+    </context>
+</generatorConfiguration>
